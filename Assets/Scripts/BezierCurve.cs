@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BezierCurve : MonoBehaviour
+//Approximate the rope with a bezier curve
+public static class BezierCurve
 {
     //Update the positions of the rope section
     public static void GetBezierCurve(Vector3 A, Vector3 B, Vector3 C, Vector3 D, List<Vector3> allRopeSections)
@@ -17,7 +18,7 @@ public class BezierCurve : MonoBehaviour
 
         float t = 0;
 
-        while (t <= 1f)
+        while(t <= 1f)
         {
             //Find the coordinates between the control points with a Bezier curve
             Vector3 newPos = DeCasteljausAlgorithm(A, B, C, D, t);
@@ -32,7 +33,7 @@ public class BezierCurve : MonoBehaviour
     }
 
     //The De Casteljau's Algorithm
-    static Vector3 DeCasteljausAlgorithm(Vector3 A, Vector3 B, Vector3 C, Vector3 D, float t)
+    public static Vector3 DeCasteljausAlgorithm(Vector3 A, Vector3 B, Vector3 C, Vector3 D, float t)
     {
         //Linear interpolation = lerp = (1 - t) * A + t * B
         //Could use Vector3.Lerp(A, B, t)
