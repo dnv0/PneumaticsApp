@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CompressorObject : MonoBehaviour
 {
-    // Start is called before the first frame update
+
     void Start()
     {
         this.name = AirSystem.compressorCounter + " Compressor ";

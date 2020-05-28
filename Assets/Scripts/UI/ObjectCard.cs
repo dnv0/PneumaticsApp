@@ -10,6 +10,7 @@ public class ObjectCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 
 
     // Создание префаба при вытягивании
+    //
     public void OnBeginDrag(PointerEventData eventData)
     {
         currentObject = Instantiate(currentObject, GameObject.Find("GameObject").transform);
@@ -18,6 +19,7 @@ public class ObjectCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     }
 
     // Позиция префаба OnDrag
+    //
     public void OnDrag(PointerEventData eventData)
     {
         currentObject.transform.position = eventData.position;
