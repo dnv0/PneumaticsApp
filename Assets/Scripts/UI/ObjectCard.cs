@@ -13,7 +13,7 @@ public class ObjectCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     //
     public void OnBeginDrag(PointerEventData eventData)
     {
-        currentObject = Instantiate(currentObject, GameObject.Find("GameObject").transform);
+        currentObject = Instantiate(currentObject, GameObject.Find("Elements").transform);
         var canvGroup = panelElements.GetComponent<CanvasGroup>();
         canvGroup.alpha = 0;
     }
@@ -22,7 +22,7 @@ public class ObjectCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     //
     public void OnDrag(PointerEventData eventData)
     {
-        currentObject.transform.position = eventData.position;
+        currentObject.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y, 20));
         
     }
 

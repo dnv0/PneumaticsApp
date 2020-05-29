@@ -6,7 +6,8 @@ public class CableComponent : MonoBehaviour
 {
     #region Class members
 
-    [SerializeField] private Transform endPoint;
+    private Transform beginPoint;
+    private Transform endPoint;
     [SerializeField] private Material cableMaterial;
 
     // Cable config
@@ -22,6 +23,21 @@ public class CableComponent : MonoBehaviour
 
     //[Range(0,3)]
     [SerializeField] private float stiffness = 1f;
+
+    public Transform Begin
+    {
+        set
+        {
+            beginPoint = value;
+        }
+    }
+    public Transform End
+    {
+        set
+        {
+            endPoint = value;
+        }
+    }
 
     private LineRenderer line;
     private CableParticle[] points;
@@ -45,34 +61,21 @@ public class CableComponent : MonoBehaviour
 	 */
     void InitCableParticles()
     {
-        Vector3 A = transform.position;
-        Vector3 D = endPoint.position;
         // Calculate segments to use
         if (totalSegments > 0)
             segments = totalSegments;
         else
             segments = Mathf.CeilToInt(cableLength * segmentsPerUnit);
 
-        Vector3 cableDirection = (endPoint.position - transform.position).normalized;
+        Vector3 cableDirection = (endPoint.position - beginPoint.transform.position).normalized;
         float initialSegmentLength = cableLength / segments;
         points = new CableParticle[segments + 1];
-
-        //
-        //Upper control point
-        //To get a little curve at the top than at the bottom
-        Vector3 B = A + transform.up * (-(A - D).magnitude * 0.1f);
-        //B = A;
-
-        //Lower control point
-        Vector3 C = D + endPoint.up * ((A - D).magnitude * 0.5f);
-        //
-
 
         // Foreach point
         for (int pointIdx = 0; pointIdx <= segments; pointIdx++)
         {
             // Initial position
-            Vector3 initialPosition = transform.position + (cableDirection * (initialSegmentLength * pointIdx));
+            Vector3 initialPosition = beginPoint.transform.position + (cableDirection * (initialSegmentLength * pointIdx));
 
             points[pointIdx] = new CableParticle(initialPosition);
         }
@@ -81,7 +84,7 @@ public class CableComponent : MonoBehaviour
         CableParticle start = points[0];
         CableParticle end = points[segments];
         
-        start.Bind(this.transform);
+        start.Bind(beginPoint.transform);
         end.Bind(endPoint.transform);
     }
 
@@ -115,6 +118,8 @@ public class CableComponent : MonoBehaviour
 	 */
     void RenderCable()
     {
+        points[0].Bind(beginPoint);
+        points[totalSegments].Bind(endPoint);
         for (int pointIdx = 0; pointIdx < segments + 1; pointIdx++)
         {
             line.SetPosition(pointIdx, points[pointIdx].Position);
@@ -142,7 +147,7 @@ public class CableComponent : MonoBehaviour
 	 */
     void VerletIntegrate()
     {
-        Vector3 gravityDisplacement = Time.fixedDeltaTime * Time.fixedDeltaTime * Physics.gravity;
+        Vector3 gravityDisplacement = Time.fixedDeltaTime * Time.fixedDeltaTime * Physics.gravity * 10;
         foreach (CableParticle particle in points)
         {
             particle.UpdateVerlet(gravityDisplacement);

@@ -10,20 +10,20 @@ public class CreateEdge : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     //
     string vertex1, vertex2;
 
-
-
     // Line Renderer Variables
     //
-    private LineRenderer lineRend;
-    private Vector3 mousePos;
-    private Vector3 startMousePos;
+
     private bool hitFlag;
 
-    void Start()
-    {
-        lineRend = GetComponent<LineRenderer>();
-        lineRend.positionCount = 2;
-    }
+    // Cable system
+    //
+    public GameObject cableObject;
+    private CableComponent cable;
+    private GameObject currentCableObject;
+
+    GameObject nullObject;
+
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -31,23 +31,26 @@ public class CreateEdge : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 
         if (Physics.Raycast(ray, out hit))
         {
-            lineRend.positionCount = 2;
 
-            Debug.Log("HITTED W/O TAG");
             var selection = hit.transform;
             
             if (hit.collider.tag.Equals("Vertex"))
             {
                 Debug.Log("HITTED!");
                 hitFlag = true;
-                startMousePos = hit.transform.position; // Start Position of the Line
-                lineRend.SetPosition(0, new Vector3(startMousePos.x, startMousePos.y, startMousePos.z));
+
                 var thisGameObject = hit.transform.gameObject.GetComponent<CreateVertex>();
 
-
-
                 vertex1 = thisGameObject.myVertexName;
-            
+
+                nullObject = new GameObject();
+                nullObject.name = "Pointer";
+
+                currentCableObject = Instantiate(cableObject, GameObject.Find("Cables").transform);
+                cable = currentCableObject.GetComponent<CableComponent>();
+                cable.Begin = hit.transform;
+                cable.End = nullObject.transform;
+
             }
         }
     }
@@ -61,8 +64,12 @@ public class CreateEdge : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 
             if (Physics.Raycast(ray, out hit))
             {
-                mousePos = hit.point;
-                lineRend.SetPosition(1, new Vector3(mousePos.x, mousePos.y, mousePos.z));
+                
+                nullObject.transform.position = hit.point;
+
+                cable.End = nullObject.transform;
+
+
             }
         }
     }  
@@ -78,11 +85,6 @@ public class CreateEdge : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
             var selection = hit.transform;
             if (hit.collider.tag.Equals("Vertex"))
             {
-                // Задание конца отрезка
-                //
-               
-                lineRend.SetPosition(0, new Vector3(startMousePos.x, startMousePos.y, startMousePos.z));
-                lineRend.SetPosition(1, new Vector3(mousePos.x, mousePos.y, mousePos.z));
 
 
                 // Запись второй вершины
@@ -91,7 +93,11 @@ public class CreateEdge : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
                 vertex2 = thisGameObject.myVertexName;
                 
                 var e1 = new TaggedUndirectedEdge<string, string>(vertex1, vertex2,"hello");
-               
+
+                
+
+                Debug.Log(hit.transform.name);
+
                 // Исключение взаимно обратных рёбер и петель
                 // Ограничение степени вершины
                 // Создание ребра
@@ -100,11 +106,27 @@ public class CreateEdge : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
                 {
                     AirSystem.graphAir.AddEdge(e1);
                     Debug.Log("Edge added!: "+ e1);
-                }
 
+                    // Защита от переназначения точек соединения кабеля
+                    //
+                    if (cable)
+                    {
+                        cable.End = hit.transform;
+                        cable = null;
+
+                        Destroy(nullObject);
+                    }
+                }
+                else
+                {
+                    Destroy(currentCableObject);
+                    Destroy(nullObject);
+                }
             }
             else{
-                lineRend.positionCount = 0;
+
+                Destroy(currentCableObject);
+                Destroy(nullObject);
             }
         }
     }
