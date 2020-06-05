@@ -21,11 +21,15 @@ public  class AirSystem : MonoBehaviour
 
     public static int compressorCounter = 0;
 
+    private UndirectedGraph<string, UndirectedEdge<string>> myGraph = new UndirectedGraph<string, UndirectedEdge<string>>(false);
+
+    private void Start()
+    {
+
+    }
     private void Update()
     {
-        // Запуск алгоритма DFS
-        //
-        dfs.Compute("CompressorOutput");
+
     }
 
     // Кнопка ингейм дебага
@@ -36,7 +40,6 @@ public  class AirSystem : MonoBehaviour
             Debug.Log(v);
         foreach (var e in graphAir.Edges)
             Debug.Log(e);
-        Debug.Log("Pedals Count: " + pedalCounter);
     }
 
 }

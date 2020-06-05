@@ -10,9 +10,9 @@ public class CreateEdge : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     //
     string vertex1, vertex2;
 
-    // Line Renderer Variables
-    //
 
+    // 
+    //
     private bool hitFlag;
 
     // Cable system

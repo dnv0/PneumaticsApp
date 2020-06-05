@@ -12,7 +12,11 @@ public class CreateVertex : MonoBehaviour
     {
         // Назначенение цвета материала: red
         //
-        GetComponent<Renderer>().material.color = new Color(255, 0, 0);
+        if (GetComponent<Renderer>())
+        {
+            GetComponent<Renderer>().material.color = new Color(255, 0, 0);
+        }
+        
         
         // Генерация названия вершины графа
         //
@@ -29,14 +33,18 @@ public class CreateVertex : MonoBehaviour
     {
         // Смена цвета материала в зависимости от наличия воздуха в точке
         //
-        if (isAir)
+        if (GetComponent<Renderer>())
         {
-            GetComponent<Renderer>().material.color = new Color(0, 255, 0);
+            if (isAir)
+            {
+                GetComponent<Renderer>().material.color = new Color(0, 255, 0);
+            }
+            else
+            {
+                GetComponent<Renderer>().material.color = new Color(255, 0, 0);
+            }
         }
-        else
-        {
-            GetComponent<Renderer>().material.color = new Color(255, 0, 0);
-        }
+        
 
         // Перключение наличия воздуха в зависимости от цвета точки графа
         //
