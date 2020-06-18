@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Vertex
+  - Element
   layers:
   - Default
   - TransparentFX

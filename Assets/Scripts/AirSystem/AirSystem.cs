@@ -23,14 +23,6 @@ public  class AirSystem : MonoBehaviour
 
     private UndirectedGraph<string, UndirectedEdge<string>> myGraph = new UndirectedGraph<string, UndirectedEdge<string>>(false);
 
-    private void Start()
-    {
-
-    }
-    private void Update()
-    {
-
-    }
 
     // Кнопка ингейм дебага
     //

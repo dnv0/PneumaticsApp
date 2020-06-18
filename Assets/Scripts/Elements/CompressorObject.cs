@@ -13,9 +13,6 @@ public class CompressorObject : MonoBehaviour
 
     void Start()
     {
-        this.name = AirSystem.compressorCounter + " Compressor ";
-        AirSystem.compressorCounter++;
-
         output = GetComponentInChildren<CreateVertex>();
 
         canv = this.transform.Find("Canvas").GetComponent<Canvas>();

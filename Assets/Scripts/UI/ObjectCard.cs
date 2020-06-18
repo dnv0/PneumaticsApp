@@ -5,20 +5,27 @@ using UnityEngine.EventSystems;
 
 public class ObjectCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public GameObject currentObject; // Префаб элемента
+    // Префаб элемента и панель
+    //
+    public GameObject elementPrefab;
     public GameObject panelElements;
 
+    private GameObject currentObject;
+    private int counter = 0;
 
-    // Создание префаба при вытягивании
+    // Создание объекта префаба при вытягивании
     //
     public void OnBeginDrag(PointerEventData eventData)
     {
-        currentObject = Instantiate(currentObject, GameObject.Find("Elements").transform);
+        currentObject = Instantiate(elementPrefab, GameObject.Find("Elements").transform);
+        currentObject.name = elementPrefab.name + " " + counter;
+        counter++;
+
         var canvGroup = panelElements.GetComponent<CanvasGroup>();
         canvGroup.alpha = 0;
     }
 
-    // Позиция префаба OnDrag
+    // Установка позиции объекта префаба OnDrag
     //
     public void OnDrag(PointerEventData eventData)
     {

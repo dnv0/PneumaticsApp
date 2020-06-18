@@ -17,7 +17,6 @@ public class CreateVertex : MonoBehaviour
             GetComponent<Renderer>().material.color = new Color(255, 0, 0);
         }
         
-        
         // Генерация названия вершины графа
         //
         string parentObjectName = transform.parent.name;
@@ -45,7 +44,6 @@ public class CreateVertex : MonoBehaviour
             }
         }
         
-
         // Перключение наличия воздуха в зависимости от цвета точки графа
         //
         GraphColor c = AirSystem.dfs.VertexColors[myVertexName];
@@ -54,5 +52,12 @@ public class CreateVertex : MonoBehaviour
             isAir = true;
         }
         else isAir = false;
+    }
+
+    // Удаление вершины из графа при удалении объекта
+    //
+    private void OnDestroy()
+    {
+        AirSystem.graphAir.RemoveVertex(myVertexName);
     }
 }
