@@ -6,25 +6,39 @@ using QuickGraph;
 
 public class CreateEdge : MonoBehaviour
 {
-    private string vertex1, vertex2;
+    private CreateVertex vertex1, vertex2;
+    private bool isConnected;
+
+    private void Start()
+    {
+        isConnected = false;
+    }
 
     private void Update()
     {
-        if (vertex1 != null && vertex2 != null)
+        if (isConnected)
         {
-            if (!AirSystem.graphAir.ContainsVertex(vertex1) || !AirSystem.graphAir.ContainsVertex(vertex2))
+            if (vertex1 == null || vertex2 == null)
             {
-                Destroy(transform.gameObject);
+                if (!AirSystem.graphAir.ContainsVertex(vertex1.myVertexName) || !AirSystem.graphAir.ContainsVertex(vertex2.myVertexName))
+                {
+                    if (vertex1)
+                        vertex1.isCabled = false;
+                    if (vertex2)
+                        vertex2.isCabled = false;
+                    Destroy(transform.gameObject);
+                }
             }
-        }
+        } 
     }
 
-    public void AddEdge(string v1, string v2)
+    public void AddEdge(CreateVertex v1, CreateVertex v2)
     {
         vertex1 = v1;
         vertex2 = v2;
+        isConnected = true;
 
-        var edge = new TaggedUndirectedEdge<string, string>(v1, v2, "Edge");
+        var edge = new TaggedUndirectedEdge<string, string>(v1.myVertexName, v2.myVertexName, "CableEdge");
         AirSystem.graphAir.AddEdge(edge);
     }
 }

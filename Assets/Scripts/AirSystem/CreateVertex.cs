@@ -7,9 +7,11 @@ public class CreateVertex : MonoBehaviour
 {
     public string myVertexName;
     public bool isAir;
+    public bool isCabled;
 
     void Start()
     {
+        isCabled = false;
         // Назначенение цвета материала: red
         //
         if (GetComponent<Renderer>())

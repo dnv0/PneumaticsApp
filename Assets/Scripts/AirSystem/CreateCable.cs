@@ -8,9 +8,9 @@ public class CreateCable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 {
     // Первая и вторая вершина
     //
-    string vertex1, vertex2;
+    CreateVertex vertex1, vertex2;
 
-    // 
+    // Флаг для предовращения создания дальнешего соединения в onDrag
     //
     private bool hitFlag;
 
@@ -33,20 +33,18 @@ public class CreateCable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
             if (hit.collider.tag.Equals("Vertex"))
             {
-                Debug.Log("HITTED!");
-                hitFlag = true;
+                vertex1 = hit.transform.gameObject.GetComponent<CreateVertex>();
+                if (!vertex1.isCabled)
+                {
+                    hitFlag = true;
 
-                var thisGameObject = hit.transform.gameObject.GetComponent<CreateVertex>();
-
-                vertex1 = thisGameObject.myVertexName;
-
-                nullObject = new GameObject("Pointer");
-
-                currentCableObject = Instantiate(cableObject, GameObject.Find("Cables").transform);
-                cable = currentCableObject.GetComponent<CableComponent>();
-                cable.Begin = hit.transform;
-                cable.End = nullObject.transform;
-
+                    nullObject = new GameObject("Pointer");
+                    currentCableObject = Instantiate(cableObject, GameObject.Find("Cables").transform);
+                    cable = currentCableObject.GetComponent<CableComponent>();
+                    cable.Begin = hit.transform;
+                    cable.End = nullObject.transform;
+                }
+                else vertex1 = null;
             }
         }
     }
@@ -80,16 +78,18 @@ public class CreateCable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             {
                 // Запись второй вершины
                 //
-                var thisGameObject = hit.transform.gameObject.GetComponent<CreateVertex>();
-                vertex2 = thisGameObject.myVertexName;
+                vertex2 = hit.transform.gameObject.GetComponent<CreateVertex>();
 
                 // Исключение взаимно обратных рёбер и петель
                 // Ограничение степени вершины
                 // Создание ребра
                 //
-                if (!AirSystem.graphAir.ContainsEdge(vertex2, vertex1) && vertex1 != vertex2 && AirSystem.graphAir.AdjacentDegree(vertex1) < 2 && AirSystem.graphAir.AdjacentDegree(vertex2) < 2)
+                if (!AirSystem.graphAir.ContainsEdge(vertex2.myVertexName, vertex1.myVertexName) && vertex1 != vertex2 && AirSystem.graphAir.AdjacentDegree(vertex1.myVertexName) < 2 && AirSystem.graphAir.AdjacentDegree(vertex2.myVertexName) < 2)
                 {
                     currentCableObject.GetComponent<CreateEdge>().AddEdge(vertex1, vertex2);
+                    vertex1.isCabled = true;
+                    vertex2.isCabled = true;
+
                     currentCableObject = null;
                     // Защита от переназначения точек соединения кабеля
                     //
