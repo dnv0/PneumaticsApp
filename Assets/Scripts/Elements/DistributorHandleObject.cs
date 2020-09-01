@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using QuickGraph;
+using QuickGraph.Algorithms.Search;
 using UnityEngine.UI;
 
 public class DistributorHandleObject : MonoBehaviour
 {
+    private UndirectedDepthFirstSearchAlgorithm<string, UndirectedEdge<string>> dfs;
+    private AirSystem airSystem;
+
     // Инициализация вершин распределителя
     //
     private CreateVertex input, output1, output2;
@@ -29,6 +33,9 @@ public class DistributorHandleObject : MonoBehaviour
         canv = this.transform.Find("Canvas").GetComponent<Canvas>();
         slider = canv.GetComponentInChildren<Slider>();
         //
+
+        dfs = new UndirectedDepthFirstSearchAlgorithm<string, UndirectedEdge<string>>(AirSystem.graphAir);
+        airSystem = GameObject.Find("PneumaticSystem").GetComponent<AirSystem>();
     }
 
     private void Update()
@@ -40,10 +47,18 @@ public class DistributorHandleObject : MonoBehaviour
             if(AirSystem.graphAir.ContainsEdge(input.myVertexName, output1.myVertexName) || AirSystem.graphAir.ContainsEdge(input.myVertexName, output2.myVertexName))
             {
                 if(AirSystem.graphAir.TryGetEdge(input.myVertexName, output1.myVertexName, out var e1))
+                {
+                    TurnOffGraphWalking(output1.myVertexName);
                     AirSystem.graphAir.RemoveEdge(e1);
+                }
+
 
                 if(AirSystem.graphAir.TryGetEdge(input.myVertexName, output2.myVertexName, out var e2))
+                {
+                    TurnOffGraphWalking(output2.myVertexName);
                     AirSystem.graphAir.RemoveEdge(e2);
+                }
+
             }
         }
 
@@ -56,6 +71,8 @@ public class DistributorHandleObject : MonoBehaviour
                 var e1 = new TaggedUndirectedEdge<string, string>(input.myVertexName, output1.myVertexName, "DistributorEdge1");
 
                 AirSystem.graphAir.AddEdge(e1);
+
+                TurnOffGraphWalking(output2.myVertexName);
 
                 AirSystem.graphAir.TryGetEdge(input.myVertexName, output2.myVertexName, out var e2);
                 AirSystem.graphAir.RemoveEdge(e2);
@@ -72,9 +89,26 @@ public class DistributorHandleObject : MonoBehaviour
 
                 AirSystem.graphAir.AddEdge(e2);
 
+                TurnOffGraphWalking(output1.myVertexName);
+
                 AirSystem.graphAir.TryGetEdge(input.myVertexName, output1.myVertexName, out var e1);
                 AirSystem.graphAir.RemoveEdge(e1);
             }
         }
     }
+
+    private void TurnOffGraphWalking(string vertexSource)
+    {
+        dfs.Compute(vertexSource);
+
+        foreach (var u in AirSystem.graphAir.Vertices)
+        {
+            if (dfs.VertexColors[u] == GraphColor.Black)
+            {
+                airSystem.GetVertexObjectByName(u).isAir = false;
+                airSystem.GetVertexObjectByName(u).pressureValue = 0;
+            }
+        }
+    }
+
 }

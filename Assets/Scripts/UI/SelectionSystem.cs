@@ -11,8 +11,6 @@ public class SelectionSystem : MonoBehaviour
     {
         currentLight = Instantiate(lightObject);
         currentLight.GetComponent<Light>().enabled = false;
-
-        Debug.Log("LghtObject: " + currentLight.name);
     }
     // Update is called once per frame
     void Update()
@@ -33,7 +31,7 @@ public class SelectionSystem : MonoBehaviour
 
             if (hit.collider.tag.Equals("Element"))
             {
-
+               // selection.gameObject.GetComponent<Outline>();
             }
                 
         }

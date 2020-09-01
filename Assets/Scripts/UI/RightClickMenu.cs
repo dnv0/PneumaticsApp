@@ -80,4 +80,9 @@ public class RightClickMenu : MonoBehaviour
         Destroy(hittedObject);
         onElementMenu.SetActive(false);
     }
+
+    public void HideMenu()
+    {
+        currentMenu.SetActive(false);
+    }
 }

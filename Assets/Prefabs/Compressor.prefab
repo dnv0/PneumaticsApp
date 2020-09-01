@@ -80,9 +80,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 7129297970052734318}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 8
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -370,6 +370,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myVertexName: 
   isAir: 0
+  isCabled: 0
+  pressureValue: 0
 --- !u!1 &7129297970417614994
 GameObject:
   m_ObjectHideFlags: 0

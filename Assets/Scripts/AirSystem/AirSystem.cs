@@ -15,23 +15,32 @@ public  class AirSystem : MonoBehaviour
     //
     public static UndirectedDepthFirstSearchAlgorithm<string, UndirectedEdge<string>> dfs = new UndirectedDepthFirstSearchAlgorithm<string, UndirectedEdge<string>>(graphAir);
 
-    // Количество педалей
-    //
-    public static int pedalCounter = 0;
 
-    public static int compressorCounter = 0;
-
-    private UndirectedGraph<string, UndirectedEdge<string>> myGraph = new UndirectedGraph<string, UndirectedEdge<string>>(false);
-
-
-    // Кнопка ингейм дебага
-    //
-    public void OutputLog()
+    public CreateVertex GetVertexObjectByName(string vertexName)
     {
-        foreach (var v in graphAir.Vertices)
-            Debug.Log(v);
-        foreach (var e in graphAir.Edges)
-            Debug.Log(e);
+        CreateVertex[] components = GameObject.FindObjectsOfType<CreateVertex>();
+
+        foreach (CreateVertex v in components)
+        {
+            if (v.myVertexName == vertexName)
+            {
+                return v;
+            }
+        }
+
+        return null;
     }
 
+    // Удаление всех пневмоэлементов
+    //
+    public void ClearWorkField()
+    {
+        foreach (Transform child in transform.Find("Elements"))
+        {
+            if (child.name != "Cables")
+            {
+                Destroy(child.gameObject);
+            }
+        }
+    }
 }

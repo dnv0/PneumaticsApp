@@ -115,12 +115,12 @@ QualitySettings:
     name: High
     pixelLightCount: 2
     shadows: 2
-    shadowResolution: 1
+    shadowResolution: 2
     shadowProjection: 0
     shadowCascades: 2
-    shadowDistance: 400
-    shadowNearPlaneOffset: 3
-    shadowCascade2Split: 0.33333334
+    shadowDistance: 500
+    shadowNearPlaneOffset: 5
+    shadowCascade2Split: 0.25202274
     shadowCascade4Split: {x: 0.06666667, y: 0.2, z: 0.46666667}
     shadowmaskMode: 1
     blendWeights: 2

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using QuickGraph;
 
-public class StockAnimation : MonoBehaviour
+public class StockAnimation2A : MonoBehaviour
 {
     // Инициализация аниматора и вершин цилиндра
     //
@@ -14,6 +14,8 @@ public class StockAnimation : MonoBehaviour
     // Необходима для предотвращения повторного запуска одной и той же анимации, в противном случае шток будет дергаться
     //
     private int lastStatus;
+
+    private float maxPressureValue = 8;
 
     void Start()
     {
@@ -29,35 +31,33 @@ public class StockAnimation : MonoBehaviour
 
     void Update()
     {
-        // Получение цветов вершин цилиндра
-        // Белый - нет воздуха, черный - есть воздух
-        //
-        GraphColor colorInput1 = AirSystem.dfs.VertexColors[input1.myVertexName];
-        GraphColor colorInput2 = AirSystem.dfs.VertexColors[input2.myVertexName];
-        //
 
-        if(colorInput1 == GraphColor.Black)
+        if ((!input1.isAir && !input2.isAir) || (input1.isAir && input2.isAir))
         {
-            if(lastStatus != 1)
+            anim.SetInteger("Status", 0);
+        }
+
+        if (input1.isAir)
+        {
+            if (lastStatus != 1)
             {
                 anim.SetInteger("Status", 1);
                 lastStatus = 1;
+
+                anim.speed = input1.pressureValue / maxPressureValue;
             }
         }
 
-        if(colorInput2 == GraphColor.Black)
+        if (input2.isAir)
         {
-            if(lastStatus != 2)
+            if (lastStatus != 2)
             {
                 anim.SetInteger("Status", 2);
                 lastStatus = 2;
+
+                anim.speed = input2.pressureValue / maxPressureValue;
             }
 
-        }
-
-        if((colorInput1 == GraphColor.White && colorInput2 == GraphColor.White) || (colorInput1 == GraphColor.Black && colorInput2 == GraphColor.Black))
-        {
-            anim.SetInteger("Status", 0);
         }
     }
 }

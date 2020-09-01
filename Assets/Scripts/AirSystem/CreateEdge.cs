@@ -41,4 +41,13 @@ public class CreateEdge : MonoBehaviour
         var edge = new TaggedUndirectedEdge<string, string>(v1.myVertexName, v2.myVertexName, "CableEdge");
         AirSystem.graphAir.AddEdge(edge);
     }
+
+    private void OnDestroy()
+    {
+        vertex1.isAir = false;
+        vertex2.isAir = false;
+
+        vertex1.pressureValue = 0;
+        vertex2.pressureValue = 0;
+    }
 }

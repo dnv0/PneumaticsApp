@@ -84,7 +84,7 @@ public class CreateCable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                 // Ограничение степени вершины
                 // Создание ребра
                 //
-                if (!AirSystem.graphAir.ContainsEdge(vertex2.myVertexName, vertex1.myVertexName) && vertex1 != vertex2 && AirSystem.graphAir.AdjacentDegree(vertex1.myVertexName) < 2 && AirSystem.graphAir.AdjacentDegree(vertex2.myVertexName) < 2)
+                if (!vertex2.isCabled)
                 {
                     currentCableObject.GetComponent<CreateEdge>().AddEdge(vertex1, vertex2);
                     vertex1.isCabled = true;

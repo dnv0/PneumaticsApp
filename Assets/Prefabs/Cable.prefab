@@ -44,11 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6958e91c363aa459eb361ceeffcca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cableMaterial: {fileID: 2100000, guid: 196a4655c88a7bd42935f6dd94246244, type: 2}
+  cableMaterial: {fileID: 2100000, guid: e0eaaab464df170459a7bba6fe9c40d8, type: 2}
   cableLength: 5
   totalSegments: 25
   segmentsPerUnit: 2
-  cableWidth: 0.1
+  cableWidth: 0.2
   verletIterations: 1
   solverIterations: 5
   stiffness: 1
