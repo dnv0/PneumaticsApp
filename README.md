@@ -9,7 +9,7 @@ PneumaticsApp - educational application for visual designing of pneumatic circui
 - Information panel of component
 - Right click menu for deleting elements or getting information
 
-## Demontration materials
+## Demonstration materials
 ### Current interface 
 Current interface has a very basic functional, that allows to add components, create connections and delete them, or open information panel.
 
